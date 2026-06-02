@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Failback.js | GPL Mods CDN</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/favicon.png">
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        :root {
+            --black: #0a0a0a;
+            --dark-gray: #1a1a1a;
+            --white: #ffffff;
+            --gold: #FFD700;
+            --silver: #c0c0c0;
+            --glow-gold: rgba(255, 215, 0, 0.4);
+            --green: #43a047;
+            --glow-green: rgba(67, 160, 71, 0.5);
+            --yellow: #f39c12;
+            --glow-yellow: rgba(243, 156, 18, 0.5);
+            --red: #e74c3c;
+            --glow-red: rgba(231, 76, 60, 0.5);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--black);
+            color: var(--white);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+            padding: 20px;
+            background-image: radial-gradient(circle at 50% 0%, #1a1a1a 0%, #0a0a0a 70%);
+        }
+
+        .container {
+            background-color: var(--dark-gray);
+            border: 1px solid #333;
+            border-top: 4px solid var(--gold);
+            border-radius: 15px;
+            padding: 50px 30px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+            position: relative;
+        }
+
+        .logo {
+            font-size: 3em;
+            font-weight: 700;
+            color: var(--gold);
+            text-shadow: 0 0 15px var(--glow-gold);
+            margin-bottom: 5px;
+            letter-spacing: 1px;
+        }
+
+        .logo span {
+            color: var(--silver);
+            text-shadow: none;
+        }
+
+        .tagline {
+            color: var(--silver);
+            font-size: 1.1em;
+            font-weight: 300;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+
+        .status-box {
+            background-color: var(--black);
+            border: 1px solid #333;
+            padding: 20px;
+            border-radius: 10px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            min-width: 250px;
+        }
+
+        .status-dot {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            flex-shrink: 0; /* ✅ FIX: Prevents the dot from squishing into an oval on mobile */
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        /* Status Colors & Animations */
+        .dot-green {
+            background-color: var(--green);
+            box-shadow: 0 0 15px var(--glow-green);
+            animation: pulseGreen 2s infinite;
+        }
+        .dot-yellow {
+            background-color: var(--yellow);
+            box-shadow: 0 0 15px var(--glow-yellow);
+            animation: pulseYellow 2s infinite;
+        }
+        .dot-red {
+            background-color: var(--red);
+            box-shadow: 0 0 15px var(--glow-red);
+            animation: pulseRed 2s infinite;
+        }
+
+        .status-text-container {
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+        }
+
+        .status-title {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: var(--white);
+            letter-spacing: 1px;
+            line-height: 1.2;
+        }
+
+        .status-subtitle {
+            font-size: 0.85em;
+            color: #888;
+            font-weight: 400;
+        }
+
+        .info-text {
+            color: #888;
+            font-size: 0.95em;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .footer-note {
+            margin-top: 40px;
+            font-size: 0.85em;
+            color: #555;
+        }
+
+        /* Pulse Keyframes for different colors */
+        @keyframes pulseGreen {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(67, 160, 71, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(67, 160, 71, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(67, 160, 71, 0); }
+        }
+        @keyframes pulseYellow {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(243, 156, 18, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(243, 156, 18, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(243, 156, 18, 0); }
+        }
+        @keyframes pulseRed {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(231, 76, 60, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(231, 76, 60, 0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <i class="fas fa-server" style="font-size: 3em; color: var(--silver); margin-bottom: 20px;"></i>
+        
+        <div class="logo">Failback<span>.js</span></div>
+        <div class="tagline">#Back-up for everything to everyone</div>
+
+        <div class="status-box">
+            <!-- Default to yellow/checking state -->
+            <div id="status-indicator" class="status-dot dot-yellow"></div>
+            <div class="status-text-container">
+                <div id="status-main-text" class="status-title">Checking Connection...</div>
+                <div id="status-sub-text" class="status-subtitle">Pinging main server</div>
+            </div>
+        </div>
+
+        <p class="info-text">
+            This server is the dedicated failover and image delivery network for <strong>GPL Mods</strong>. 
+            If the primary cloud storage experiences an interruption, Failback.js automatically routes global traffic here to ensure zero downtime.
+        </p>
+
+        <a href="https://gplmods.webredirect.org" style="display: inline-block; margin-top: 15px; padding: 10px 25px; background: transparent; border: 2px solid var(--gold); color: var(--gold); text-decoration: none; border-radius: 25px; font-weight: 600; transition: all 0.3s ease;" onmouseover="this.style.background='var(--gold)'; this.style.color='#000'; this.style.boxShadow='0 0 15px var(--glow-gold)';" onmouseout="this.style.background='transparent'; this.style.color='var(--gold)'; this.style.boxShadow='none';">
+            Return to Main Site
+        </a>
+    </div>
+
+    <div class="footer-note">
+        Powered by InfinityFree • Secured by GPL Mods Architecture
+    </div>
+
+    <script>
+        // Ensure this points to your actual main site URL
+        const MAIN_SITE_URL = 'https://gplmods.webredirect.org';
+        
+        // Use the /healthz endpoint we built earlier!
+        const HEALTH_ENDPOINT = `${MAIN_SITE_URL}/healthz`;
+
+        const statusIndicator = document.getElementById('status-indicator');
+        const statusMainText = document.getElementById('status-main-text');
+        const statusSubText = document.getElementById('status-sub-text');
+
+        function updateUI(colorClass, mainText, subText) {
+            // Remove all existing color classes
+            statusIndicator.classList.remove('dot-green', 'dot-yellow', 'dot-red');
+            // Add the new color class
+            statusIndicator.classList.add(colorClass);
+            
+            statusMainText.textContent = mainText;
+            statusSubText.textContent = subText;
+        }
+
+        async function checkMainServer() {
+            try {
+                // Fetch with a timeout so it doesn't hang forever if the server is completely dead
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 8000); // 8 second timeout
+
+                // Append a timestamp to prevent the browser from caching the response
+                const response = await fetch(`${HEALTH_ENDPOINT}?t=${new Date().getTime()}`, { 
+                    signal: controller.signal,
+                    // We just need the headers to see if it's alive, not the full HTML body
+                    method: 'HEAD' 
+                });
+                
+                clearTimeout(timeoutId);
+
+                if (response.ok) {
+                    // Status 200-299: Server is fully online and happy
+                    updateUI('dot-green', 'Main Server Online', 'Status: OK (Connected)');
+                } else if (response.status === 503) {
+                    // Status 503: We set this up for Maintenance Mode!
+                    updateUI('dot-yellow', 'Maintenance Mode', 'Server is online but locked');
+                } else {
+                    // Status 4xx or 5xx: Server is returning errors
+                    updateUI('dot-yellow', 'Server Degraded', `Status: ${response.status} Error`);
+                }
+
+            } catch (error) {
+                if (error.name === 'AbortError') {
+                    // The fetch timed out (took longer than 8 seconds)
+                    updateUI('dot-red', 'Server Unreachable', 'Status: Timeout / Booting');
+                } else {
+                    // Network error, DNS error, server completely offline
+                    updateUI('dot-red', 'Main Server Offline', 'Status: Connection Refused');
+                }
+            }
+        }
+
+        // Check immediately on page load
+        checkMainServer();
+
+        // Check again every 30 seconds to keep the status live
+        setInterval(checkMainServer, 30000);
+    </script>
+</body>
+</html>
