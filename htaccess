@@ -1,0 +1,12 @@
+# 1. Allow images to be loaded by the main GPL Mods website
+<IfModule mod_headers.c>
+    Header set Access-Control-Allow-Origin "*"
+</IfModule>
+
+# 2. Prevent people from viewing lists of files inside your folders
+Options -Indexes
+
+# 3. Security headers (Bonus)
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+</IfModule>

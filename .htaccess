@@ -1,0 +1,44 @@
+# ==============================================================================
+# GPL MODS — FAILBACK.JS CDN & IMAGE MIRROR (.htaccess)
+# Designed for InfinityFree Hosting (htdocs directory)
+# ==============================================================================
+
+# 1. Allow images and assets to be loaded by the main GPL Mods website (CORS)
+<IfModule mod_headers.c>
+    Header set Access-Control-Allow-Origin "*"
+    Header set Access-Control-Allow-Methods "GET, HEAD, OPTIONS"
+    Header set Access-Control-Allow-Headers "Origin, X-Requested-With, Content-Type, Accept, Range"
+    Header set Access-Control-Expose-Headers "Content-Length, Content-Range"
+</IfModule>
+
+# 2. Prevent people from viewing lists of files inside your folders (Directory Privacy)
+Options -Indexes
+
+# 3. Security headers (Bonus)
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+</IfModule>
+
+# 4. Ensure modern image formats (WebP, SVG, JSON) are properly served
+<IfModule mod_mime.c>
+    AddType image/webp .webp
+    AddType image/svg+xml .svg
+    AddType image/x-icon .ico
+    AddType application/json .json
+    AddType text/javascript .js
+</IfModule>
+
+# 5. Browser caching (Saves InfinityFree CPU/daily hit limits by caching images)
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresDefault "access plus 1 month"
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/jpg "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/webp "access plus 1 year"
+    ExpiresByType image/gif "access plus 1 year"
+    ExpiresByType image/svg+xml "access plus 1 year"
+    ExpiresByType image/x-icon "access plus 1 year"
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType text/javascript "access plus 1 month"
+</IfModule>
