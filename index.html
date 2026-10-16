@@ -96,6 +96,22 @@
             -webkit-tap-highlight-color: transparent;
         }
 
+        /* =========================================================
+           BULLETPROOF IMAGE DOWNLOAD & EXTRACTION PROTECTION
+           ========================================================= */
+        img,
+        .logo-img {
+            -webkit-touch-callout: none !important;
+            -webkit-user-select: none !important;
+            -khtml-user-select: none !important;
+            -moz-user-select: none !important;
+            -ms-user-select: none !important;
+            user-select: none !important;
+            -webkit-user-drag: none !important;
+            user-drag: none !important;
+            pointer-events: none !important;
+        }
+
         html, body {
             overflow-x: hidden;
             width: 100%;
@@ -361,8 +377,8 @@
         }
 
         .logo-silver-glow {
-            color: var(--silver);
-            text-shadow: 0 0 12px rgba(192, 192, 192, 0.5);
+            color: #e2e8f0;
+            text-shadow: 0 0 12px rgba(226, 232, 240, 0.65), 0 0 24px rgba(203, 213, 225, 0.35);
         }
 
         .status-pill-badge {
@@ -1193,11 +1209,11 @@
         <header class="status-hero">
             <div class="logo-wrapper">
                 <div class="logo-glow-aura"></div>
-                <img src="./favicon.png" alt="GPL Mods Logo" class="logo-img" onerror="this.onerror=null; this.src='https://gplmods.webredirect.org/favicon.png';">
+                <img src="./favicon.png" alt="GPL Mods Logo" class="logo-img" draggable="false" oncontextmenu="return false;" onerror="this.onerror=null; this.src='https://gplmods.webredirect.org/favicon.png';">
             </div>
             
             <h1>
-                <span class="logo-gold-glow">GPL Mods</span>
+                <span class="logo-gold-glow">GPL</span> <span class="logo-silver-glow">Mods</span>
                 <span class="logo-silver-glow">System Status</span>
                 <span class="status-pill-badge">Live</span>
             </h1>
@@ -1838,6 +1854,47 @@
             runLiveHealthDiagnostics();
             startCountdown();
         });
+
+        // --- 7. BULLETPROOF IMAGE DOWNLOAD & EXTRACTION PROTECTION ---
+        (function() {
+            document.addEventListener('contextmenu', function(e) {
+                if (e.target.tagName === 'IMG' || e.target.closest('img') || e.target.closest('.logo-wrapper') || e.target.classList.contains('logo-img')) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    return false;
+                }
+            }, { capture: true });
+
+            document.addEventListener('dragstart', function(e) {
+                if (e.target.tagName === 'IMG' || e.target.closest('img') || e.target.closest('.logo-wrapper') || e.target.classList.contains('logo-img')) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    return false;
+                }
+            }, { capture: true });
+
+            let touchTimer = null;
+            document.addEventListener('touchstart', function(e) {
+                if (e.target.tagName === 'IMG' || e.target.closest('img') || e.target.closest('.logo-wrapper')) {
+                    clearTimeout(touchTimer);
+                    touchTimer = setTimeout(() => {}, 250);
+                }
+            }, { passive: true });
+
+            document.addEventListener('touchend', function () {
+                if (touchTimer) clearTimeout(touchTimer);
+            }, { passive: true });
+
+            document.addEventListener('touchcancel', function () {
+                if (touchTimer) clearTimeout(touchTimer);
+            }, { passive: true });
+
+            document.addEventListener('gesturestart', function (e) {
+                if (e.target.tagName === 'IMG' || e.target.closest('img') || e.target.closest('.logo-wrapper')) {
+                    e.preventDefault();
+                }
+            });
+        })();
     </script>
 </body>
 </html>
